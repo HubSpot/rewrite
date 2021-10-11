@@ -56,6 +56,174 @@ class UpgradeDependencyVersionTest : MavenRecipeTest {
     )
 
     @Test
+    @Issue("https://github.com/openrewrite/rewrite/pull/1098") // todo
+    fun upgradeFourPartVersionUsingExact() = assertChanged(
+        recipe = UpgradeDependencyVersion(
+            "com.fasterxml.jackson.core",
+            "jackson-databind",
+            "2.9.10.8",
+            null,
+            null
+        ),
+        before = """
+            <project>
+                <modelVersion>4.0.0</modelVersion>
+                <groupId>com.mycompany.app</groupId>
+                <artifactId>my-app</artifactId>
+                <version>1</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.fasterxml.jackson.core</groupId>
+                        <artifactId>jackson-databind</artifactId>
+                        <version>2.9.10.7</version>
+                    </dependency>
+                </dependencies>
+            </project>
+        """,
+        after = """
+            <project>
+                <modelVersion>4.0.0</modelVersion>
+                <groupId>com.mycompany.app</groupId>
+                <artifactId>my-app</artifactId>
+                <version>1</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.fasterxml.jackson.core</groupId>
+                        <artifactId>jackson-databind</artifactId>
+                        <version>2.9.10.8</version>
+                    </dependency>
+                </dependencies>
+            </project>
+        """
+    )
+
+    @Test
+    @Issue("https://github.com/openrewrite/rewrite/pull/1098") // todo
+    fun upgradeToLatestFourPartVersionUsingThreePartXRange() = assertChanged(
+        recipe = UpgradeDependencyVersion(
+            "com.fasterxml.jackson.core",
+            "jackson-databind",
+            "2.9.x",
+            null,
+            null
+        ),
+        before = """
+            <project>
+                <modelVersion>4.0.0</modelVersion>
+                <groupId>com.mycompany.app</groupId>
+                <artifactId>my-app</artifactId>
+                <version>1</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.fasterxml.jackson.core</groupId>
+                        <artifactId>jackson-databind</artifactId>
+                        <version>2.9.9</version>
+                    </dependency>
+                </dependencies>
+            </project>
+        """,
+        after = """
+            <project>
+                <modelVersion>4.0.0</modelVersion>
+                <groupId>com.mycompany.app</groupId>
+                <artifactId>my-app</artifactId>
+                <version>1</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.fasterxml.jackson.core</groupId>
+                        <artifactId>jackson-databind</artifactId>
+                        <version>2.9.10.8</version>
+                    </dependency>
+                </dependencies>
+            </project>
+        """
+    )
+
+    @Test
+    @Issue("https://github.com/openrewrite/rewrite/pull/1098") // todo
+    fun upgradeToLatestFourPartVersionUsingFourPartXRange() = assertChanged(
+        recipe = UpgradeDependencyVersion(
+            "com.fasterxml.jackson.core",
+            "jackson-databind",
+            "2.9.10.x",
+            null,
+            null
+        ),
+        before = """
+            <project>
+                <modelVersion>4.0.0</modelVersion>
+                <groupId>com.mycompany.app</groupId>
+                <artifactId>my-app</artifactId>
+                <version>1</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.fasterxml.jackson.core</groupId>
+                        <artifactId>jackson-databind</artifactId>
+                        <version>2.9.9</version>
+                    </dependency>
+                </dependencies>
+            </project>
+        """,
+        after = """
+            <project>
+                <modelVersion>4.0.0</modelVersion>
+                <groupId>com.mycompany.app</groupId>
+                <artifactId>my-app</artifactId>
+                <version>1</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.fasterxml.jackson.core</groupId>
+                        <artifactId>jackson-databind</artifactId>
+                        <version>2.9.10.8</version>
+                    </dependency>
+                </dependencies>
+            </project>
+        """
+    )
+
+    @Test
+    @Issue("https://github.com/openrewrite/rewrite/pull/1098") // todo
+    fun upgradeFromFourPartVersionToThreePartUsingRange() = assertChanged(
+        recipe = UpgradeDependencyVersion(
+            "com.fasterxml.jackson.core",
+            "jackson-databind",
+            "2.11.*",
+            null,
+            null
+        ),
+        before = """
+            <project>
+                <modelVersion>4.0.0</modelVersion>
+                <groupId>com.mycompany.app</groupId>
+                <artifactId>my-app</artifactId>
+                <version>1</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.fasterxml.jackson.core</groupId>
+                        <artifactId>jackson-databind</artifactId>
+                        <version>2.9.10.8</version>
+                    </dependency>
+                </dependencies>
+            </project>
+        """,
+        after = """
+            <project>
+                <modelVersion>4.0.0</modelVersion>
+                <groupId>com.mycompany.app</groupId>
+                <artifactId>my-app</artifactId>
+                <version>1</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.fasterxml.jackson.core</groupId>
+                        <artifactId>jackson-databind</artifactId>
+                        <version>2.11.4</version>
+                    </dependency>
+                </dependencies>
+            </project>
+        """
+    )
+
+    @Test
     @Issue("https://github.com/openrewrite/rewrite/issues/739")
     fun upgradeVersionWithGroupIdAndArtifactIdDefinedAsProperty() = assertChanged(
         recipe = UpgradeDependencyVersion(

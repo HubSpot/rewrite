@@ -37,8 +37,9 @@ public class LatestRelease implements VersionComparator {
         if (!matcher.matches() || PRE_RELEASE_ENDING.matcher(version).find()) {
             return false;
         }
+        int lastGroup = matcher.groupCount();
         return metadataPattern == null ||
-                (matcher.group(4) != null && matcher.group(4).matches(metadataPattern));
+                (matcher.group(lastGroup) != null && matcher.group(lastGroup).matches(metadataPattern));
     }
 
     static String normalizeVersion(String version) {
